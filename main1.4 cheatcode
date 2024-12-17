@@ -1,0 +1,186 @@
+import random
+import sword_chances as s
+import armor_chances as a
+import skill_chances as m
+choosing = True
+starting = True
+
+swords = {"wooden sword": {"number": 1,
+                          "rarity": "common"},
+          "rusty sword": {"number": 5,
+                          "rarity": "common"},
+          "common soldier sword": {"number": 20,
+                                   "rarity": "uncommon"},
+          "royal sword": {"number": 50,
+                          "rarity": "rare"},
+          "dragon tooth sword": {"number": 80,
+                                 "rarity": "rare"},
+          "invisible blade": {"number": 100,
+                              "rarity": "epic"},
+          "vampiric sword": {"number": 150,
+                             "rarity": "epic"},
+          "heroes sword": {"number": 350,
+                           "rarity": "Legendary"},
+          "god slayer sword": {"number": 400,
+                               "rarity": "Legendary"},
+          "sword of the forgotten god": {"number": 800,
+                                         "rarity": "Mythic"}}
+
+
+armor = { "old leather armor" : {"number": 1,
+                                 "rarity": "common"},
+          "chainmail" : {"number": 5,
+                         "rarity": "common"},
+          "common soldier armor": {"number": 20,
+                                   "rarity": "uncommon"},
+          "generals armor": {"number": 50,
+                             "rarity": "rare"},
+          "troll skin armor": {"number": 80,
+                               "rarity": "rare"},
+          "paladins armor": {"number": 100,
+                              "rarity": "epic"},
+          "dragon scale armor": {"number": 150,
+                                 "rarity": "epic"},
+          "void armor": {"number": 350,
+                         "rarity": "Legendary"},
+          "soldier of the divine armies armor": {"number": 400,
+                                                 "rarity": "Legendary"},
+          "general of the divine armies armor": {"number": 800,
+                                                 "rarity": "Mythic"}}
+
+
+abilities = { "small spark": {"number": 1,
+                              "rarity": "common"},
+              "basic water manipulation": {"number": 5,
+                                           "rarity": "common"},
+              "basic blood manipulation": {"number": 20,
+                                           "rarity": "uncommon"},
+              "animal taming": {"number": 50,
+                                "rarity": "rare"},
+              "possession": {"number": 80,
+                             "rarity": "rare"},
+              "holy magic": {"number": 100,
+                             "rarity": "epic"},
+              "golem creation": {"number": 150,
+                                 "rarity": "epic"},
+              "celestial summoning": {"number": 350,
+                                      "rarity": "Legendary"},
+              "rain of ten thousand swords": {"number": 400,
+                                              "rarity": "Legendary"},
+              "eyes of the creator": {"number": 800,
+                                      "rarity": "Mythic"}}
+
+
+gauntlet = { "slime": {"strength": 10,
+                        "description": "tbd"},
+             "Goblin": {"strength": 20,
+                        "description": "tbd"},
+             "lizard man": {"strength": 30,
+                        "description": "tbd"},
+             "orc": {"strength": 40,
+                        "description": "tbd"},
+             "ogre": {"strength": 50,
+                        "description": "tbd"},
+             "Lava Golem": {"strength": 100,
+                        "description": "tbd"},
+             "wyvern": {"strength": 150,
+                        "description": "tbd"},
+             "demon": {"strength": 200,
+                        "description": "tbd"},
+             "lich": {"strength": 300,
+                        "description": "tbd"},
+             "dragon": {"strength": 500,
+                        "description": "tbd"},
+             "fallen god": {"strength": 1000,
+                        "description": "tbd"}}
+
+sword_choice = []
+armor_choice = []
+skill_choice = []
+
+player = {"swords": None, "armor": None, "magic": None}
+
+
+def character():
+    global choosing
+    for i in range(3):
+        s_collect = random.choices(s.sword_chance)
+        sword_choice.append(s_collect)
+        print(f' - {s_collect[0]}\n    -{swords[s_collect[0]]["number"]}\n '
+                  f'   -{swords[s_collect[0]]["rarity"]}')
+    while choosing:
+        weapon = input("what would you like to use? ")
+        if weapon == "creation":
+            player["swords"] = "sword of the forgotten god"
+            player["armor"] = "general of the divine armies armor"
+            player["magic"] = "eyes of the creator"
+            start()
+            break
+        else:
+            if weapon in str(sword_choice):
+                player["swords"] = weapon
+                print(f'your weapon is {player["swords"]}')
+                break
+            else:
+                print("that is not an option")
+                continue
+        for i in range(3):
+            a_collect = random.choices(a.armor_chance)
+            armor_choice.append(a_collect)
+            print(f' - {a_collect[0]}\n    -{armor[a_collect[0]]["number"]}\n '
+                      f'   -{armor[a_collect[0]]["rarity"]}')
+        while choosing:
+            armor_2 = input("what would you like to use? ")
+            if armor_2 in str(armor_choice):
+                player["armor"] = armor_2
+                print(f'your armor is {player["armor"]}')
+                break
+            else:
+                print("that is not an option")
+                continue
+        for i in range(3):
+            s_collect = random.choices(m.skill_chance)
+            skill_choice.append(s_collect)
+            print(f' - {s_collect[0]}\n    -{abilities[s_collect[0]]["number"]}\n '
+                        f'   -{abilities[s_collect[0]]["rarity"]}')
+        while choosing:
+            skill = input("what would you like to use? ")
+            if skill in str(skill_choice):
+                player["magic"] = skill
+                print(f'your skill is {player["magic"]}')
+                choosing = False
+                start()
+            else:
+                print("that is not an option")
+                continue
+
+
+def start():
+    global starting
+    while starting:
+        play = input("would you like to start the gauntlet? (yes/no) ")
+        if play == "yes":
+            total_power = (swords[player["swords"]]["number"] + armor[player["armor"]]["number"]
+                           + abilities[player["magic"]]["number"])
+            print(total_power)
+            for monsters in gauntlet:
+                if total_power > gauntlet[monsters]["strength"]:
+                    print(f'against: {monsters}')
+                    print("you won")
+                    if gauntlet[monsters] == gauntlet["fallen god"]:
+                        print("You have completed the gauntlet, Congratulations!")
+                        starting = False
+                        break
+                    else:
+                        continue
+                elif total_power < gauntlet[monsters]["strength"]:
+                    print(f'against: {monsters}')
+                    print("you lost")
+                    starting = False
+                    break
+        elif play == "no":
+            print("Ok, goodbye")
+            starting = False
+            quit()
+
+character()
